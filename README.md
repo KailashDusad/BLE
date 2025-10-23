@@ -15,15 +15,29 @@ This project implements a real-time encrypted voice transmission system using Bl
 ## System Architecture
 
 ### Transmitter (Phone A)
-  Voice Input → Encryption Module → BLE Transmission
-  ↓
-  [Method 1: Spectrum Scrambling]
-  [Method 2: Noise Masking]
+```
+Voice Input
+    ↓
+Encryption Module
+    ↓
+├── Method 1: Spectrum Scrambling
+└── Method 2: Noise Masking
+    ↓
+BLE Transmission
+```
 
 ### Receiver (Phone B)
-  BLE Reception → Decryption Module → Audio Playback
-  ↓
-  [Encrypted Audio / Decrypted Audio]
+```
+BLE Reception
+    ↓
+Decryption Module
+    ↓
+├── Play Encrypted Audio
+├── Play Decrypted Audio (Method 1: Spectrum Scrambling)
+└── Play Decrypted Audio (Method 2: Noise Masking)
+    ↓
+Audio Playback
+```
 
 
 ## Software Requirements
@@ -63,3 +77,30 @@ Overlays pure-tone noise signals on audio to mask intelligibility
 3. Apply optional filtering to remove residual noise
 
 
+### Signal Processing Pipeline
+
+```
+Input Audio
+    ↓
+[Sample Buffering]
+    ↓
+[Encryption Algorithm Selection]
+    ↓
+├─ Method 1: FFT → Scrambling → IFFT
+└─ Method 2: Noise Generation → Addition
+    ↓
+[BLE Packetization]
+    ↓
+[Wireless Transmission]
+    ↓
+[Reception & Buffering]
+    ↓
+[BLE Depacketization]
+    ↓
+[Decryption]
+    ↓
+├─ Method 1: FFT → Unscrambling → IFFT
+└─ Method 2: Noise Generation → Subtraction
+    ↓
+[Audio Playback / UI Display]
+```
